@@ -1,13 +1,14 @@
 {
-    "playlist": "###",
-    "api": {
-        "clientId": "###",
-        "clientSecret": "###"
-    },
-    "clock": {
-        "startTime": 17,
-        "chillVibes": 4,
-        "morningVibes": 10,
-        "hypeVibes": 13
-    }
+  "playlist": "###",
+  "api": {
+    "clientId": "###",
+    "clientSecret": "###",
+    "redirectUri": "http://localhost:8080/callback"
+  },
+  "clock": {
+    "startTime": 17,
+    "chillVibes": 4,
+    "morningVibes": 10,
+    "hypeVibes": 13
+  }
 }
