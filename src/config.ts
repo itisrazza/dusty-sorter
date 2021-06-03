@@ -59,7 +59,7 @@ export interface Config {
  * @returns A future configuration file.
  */
 export async function getConfig(filename?: string): Promise<Config> {
-    filename ??= "config.json"
+    filename ??= defaultConfigPath()
 
     const configString = await fs.readFile(filename, { encoding: "utf8" })
     const config = JSON.parse(configString)

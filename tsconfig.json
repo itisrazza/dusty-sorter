@@ -1,13 +1,12 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "outDir": "lib",
-        "alwaysStrict": true,
-        "module": "CommonJS",
-        "esModuleInterop": true,
-        "sourceMap": true
-    },
-    "include": [
-        "src/**/*.ts"
-    ]
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outDir": "lib",
+    "alwaysStrict": true,
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "target": "ESNext"
+  },
+  "include": ["src/**/*.ts"]
 }
