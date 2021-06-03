@@ -1,0 +1,13 @@
+{
+    "playlist": "###",
+    "api": {
+        "clientId": "###",
+        "clientSecret": "###"
+    },
+    "clock": {
+        "startTime": 17,
+        "chillVibes": 4,
+        "morningVibes": 10,
+        "hypeVibes": 13
+    }
+}
