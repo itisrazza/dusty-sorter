@@ -39,6 +39,9 @@ async function main() {
         .join("\n");
     await fs.writeFile("playlist.txt", sortedTitles)
 
+    // if the user didn't request an upload stop here
+    if (process.argv.includes("--no-upload")) return;
+
     console.log("++ Creating new playlist");
     const playlist = await spotify.createPlaylist(
         `Bender Playlist - ${new Date().toISOString()} - ${Math.random()}`,
@@ -60,7 +63,9 @@ async function main() {
     }
 
     console.log("\n!! Playlist ready: " + playlist.body.external_urls.spotify)
-    process.exit(0)
 }
 
 main()
+    .then(() => {
+        process.exit(0)
+    });

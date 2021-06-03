@@ -7,7 +7,7 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Launch Program (Upload Playlist)",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/lib/main.js",
       "preLaunchTask": "tsc: build - tsconfig.json",
@@ -15,6 +15,18 @@
       "outFiles": ["${workspaceFolder}/lib/**/*.js"],
       "cwd": "${workspaceFolder}/tmp",
       "args": ["${workspaceFolder}/config.json"]
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Launch Program (No Upload)",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/lib/main.js",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "showAsyncStacks": true,
+      "outFiles": ["${workspaceFolder}/lib/**/*.js"],
+      "cwd": "${workspaceFolder}/tmp",
+      "args": ["${workspaceFolder}/config.json", "--no-upload"]
     }
   ]
 }

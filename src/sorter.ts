@@ -50,9 +50,9 @@ export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): 
     let time = Time.fromHour(clock.startTime);
     let vibe: Vibe = "hype"
     const vibeTimes = {
-        "hype": new Time(clock.hypeVibes),
-        "chill": new Time(clock.chillVibes),
-        "morning": new Time(clock.morningVibes)
+        "hype": Time.fromHour(clock.hypeVibes),
+        "chill": Time.fromHour(clock.chillVibes),
+        "morning": Time.fromHour(clock.morningVibes)
     }
     let unvisitedTracks = playlist.sort(randomSorter);     // randomise list to remove bias
 
@@ -79,30 +79,20 @@ export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): 
         time = time.add(playlistLength);
 
         // update the vibe if needed
-        switch (vibe) {
-            case "hype":
-                if (vibeTimes["chill"].compareTo(time.floorDay()) < 0) {
-                    vibe = "chill";
-                    console.log(`Changed vibe from "hype" to "chill".`)
-                }
-                break;
-
-            case "chill":
-                if (vibeTimes["morning"].compareTo(time.floorDay()) < 0) {
-                    vibe = "morning"
-                    console.log(`Changed vibe from "chill" to "morning".`)
-                }
-                break;
-
-            case "morning":
-                if (vibeTimes["hype"].compareTo(time.floorDay()) < 0) {
-                    vibe = "hype"
-                    console.log(`Changed vibe from "morning" to "hype".`)
-                }
-                break;
-
-            default: throw new Error("you got bad vibes >:(")
+        const oldVibe = vibe;
+        if (vibe === "hype" && vibeTimes["chill"].compareTo(time.floorDay()) < 0) {
+            vibe = "chill"
         }
+        if (vibe === "chill" && vibeTimes["morning"].compareTo(time.floorDay()) < 0) {
+            vibe = "morning"
+        }
+        if (vibe === "morning" && vibeTimes["hype"].compareTo(time.floorDay()) < 0) {
+            vibe = "hype"
+        }
+        if (oldVibe !== vibe) {
+            console.log(`Changed vibe from ${oldVibe} to ${vibe}`)
+        }
+        // the above solution isn't clean, but works
     }
 
     return targetPlaylist;

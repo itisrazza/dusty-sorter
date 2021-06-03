@@ -15,9 +15,13 @@ export type TrackWithFeatures = {
 export async function getSpotifyClient(config: Config): Promise<SpotifyApi> {
     const spotify = new SpotifyApi(config.api);
 
-    // // get user grant
-    // const grant = await spotify.clientCredentialsGrant();
-    // spotify.setAccessToken(grant.body.access_token);
+    // if the user requested NOT to upload, just log in as the app
+    if (process.argv.includes("--no-upload")) {
+        const grant = await spotify.clientCredentialsGrant();
+        spotify.setAccessToken(grant.body.access_token);
+
+        return spotify;
+    }
 
     // get user auth url
     const authUrl = spotify.createAuthorizeURL(SPOTIFY_SCOPES, STATE, SHOW_DIALOG);
