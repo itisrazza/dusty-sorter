@@ -50,7 +50,7 @@ export class Time {
         const minutes = this.minutes().toString().padStart(2, '0')
         const seconds = this.seconds().toString().padStart(2, '0')
 
-        let str = `${hours}:${minutes}:${seconds}.${this.decimals()}`
+        let str = `${hours}:${minutes}:${seconds}.${this.decimals().toPrecision(3).padStart(4, '0').substring(2, 6)}`
         if (this.days() > 0) {
             str = `${this.days()} days, ${str}`
         }

@@ -72,7 +72,6 @@ export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): 
         targetPlaylist.push(...(section
             .sort(randomSorter)
             .map(track => { return { track, vibe, time } })));
-        console.log(`${time} ~ ${targetPlaylist.length} tracks sorted. ${unvisitedTracks.length} left to go.`);
 
         // calculate time elapsed
         const playlistLength = section.reduce((acc, current) => acc.addMilliseconds(current.track.duration_ms), new Time(0));
@@ -88,9 +87,6 @@ export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): 
         }
         if (vibe === "morning" && vibeTimes["hype"].compareTo(time.floorDay()) < 0) {
             vibe = "hype"
-        }
-        if (oldVibe !== vibe) {
-            console.log(`Changed vibe from ${oldVibe} to ${vibe}`)
         }
         // the above solution isn't clean, but works
     }

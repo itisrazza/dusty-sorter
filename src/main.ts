@@ -14,8 +14,8 @@ const drawBar = (width: number, percent: number, emptyChar = " ", fillChar = "#"
 }
 
 const trackPrint = ({ track, time, vibe }: SortedTrack) =>
-    time.toString() + ' - ' +
-    vibe.padStart(16) + ' - ' +
+    time.toString().padStart(48) + ' - ' +
+    vibe.padEnd(16) + ' - ' +
     `AC${drawBar(20, track.features.acousticness)} ` +
     `DA${drawBar(20, track.features.danceability)} ` +
     `EN${drawBar(20, track.features.energy)} ` +
@@ -29,15 +29,16 @@ async function main() {
     const config = await getConfig()
     const spotify = await getSpotifyClient(config)
 
-    console.log("\n++ Fetching playlist...")
+    console.log("++ Fetching playlist...")
     const tracks = await getPlaylistTracksWithFeatures(spotify, config.playlist);
 
-    console.log("\n++ Sorting playlist...")
+    console.log("++ Sorting playlist...")
     const sorted = sortPlaylist(tracks, config);
     const sortedTitles = sorted
         .map(trackPrint)
         .join("\n");
     await fs.writeFile("playlist.txt", sortedTitles)
+    console.log("!! Written playlist report to `playlist.txt'.")
 
     // if the user didn't request an upload stop here
     if (process.argv.includes("--no-upload")) return;
@@ -48,7 +49,7 @@ async function main() {
         {}
     )
 
-    console.log("\n++ Adding tracks to new playlist");
+    console.log("++ Adding tracks to new playlist");
     let start = 0;
     while (start < sorted.length) {
         const end = Math.min(start + 100, sorted.length);
@@ -62,7 +63,7 @@ async function main() {
         start = end;
     }
 
-    console.log("\n!! Playlist ready: " + playlist.body.external_urls.spotify)
+    console.log("!! Playlist ready: " + playlist.body.external_urls.spotify)
 }
 
 main()
