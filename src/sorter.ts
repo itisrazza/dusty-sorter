@@ -1,3 +1,4 @@
+import { trace } from "console";
 import { monitorEventLoopDelay } from "perf_hooks";
 import { Config } from "./config";
 import { TrackWithFeatures } from "./spotify";
@@ -26,11 +27,10 @@ const chillSorter = (a: TrackWithFeatures, b: TrackWithFeatures) => {
 };
 
 const morningSorter = (a: TrackWithFeatures, b: TrackWithFeatures) => {
-    // high liveness, high energy
-    const liveDiff = a.features.liveness - b.features.liveness
+    // high energy
     const energyDiff = a.features.energy - b.features.energy
 
-    return energyDiff / 2 + liveDiff / 2
+    return -energyDiff
 };
 
 type Vibe = "hype" | "chill" | "morning"
@@ -40,7 +40,13 @@ const vibeSorter: { [vibe: string]: Sorter<TrackWithFeatures> } = {
     morning: morningSorter
 }
 
-export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): TrackWithFeatures[] {
+export type SortedTrack = {
+    track: TrackWithFeatures,
+    time: Time,
+    vibe: Vibe
+}
+
+export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): (SortedTrack)[] {
     let time = Time.fromHour(clock.startTime);
     let vibe: Vibe = "hype"
     const vibeTimes = {
@@ -53,7 +59,7 @@ export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): 
     const playlistLength = playlist.reduce((acc, current) => acc.addMilliseconds(current.track.duration_ms), new Time(0));
     console.log(`!! Playlist is ${playlistLength} long.`)
 
-    const targetPlaylist: TrackWithFeatures[] = [];
+    const targetPlaylist: (SortedTrack)[] = [];
     while (targetPlaylist.length < playlist.length) {
         // sort by target and take down a section
         const sectionLength = Math.min(unvisitedTracks.length, 20);
@@ -63,7 +69,9 @@ export function sortPlaylist(playlist: TrackWithFeatures[], { clock }: Config): 
         unvisitedTracks = unvisitedTracks.filter(value => !section.includes(value));
 
         // randomise the list and add to target playlist
-        targetPlaylist.push(...(section.sort(randomSorter)));
+        targetPlaylist.push(...(section
+            .sort(randomSorter)
+            .map(track => { return { track, vibe, time } })));
         console.log(`${time} ~ ${targetPlaylist.length} tracks sorted. ${unvisitedTracks.length} left to go.`);
 
         // calculate time elapsed
