@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { getSpotifyClient, getPlaylistTracksWithFeatures, TrackWithFeatures } from "./spotify"
 import { getConfig } from "./config"
 import fs from "fs/promises"
